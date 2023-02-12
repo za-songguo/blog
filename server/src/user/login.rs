@@ -15,7 +15,9 @@ use crate::{
     AppState,
 };
 
+// 替换成你自己的
 const CLIENT_ID: &str = "1c509a9cd47635f8a78d";
+// 替换成你自己的
 const CLIENT_SECRET: &str = "edacafdd5d4a62301bb9f2eea674a3c443b847e8";
 
 /// 接收传过来的 code，获取 access_token，得到用户数据并存进数据库

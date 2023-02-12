@@ -16,10 +16,18 @@ pub async fn fetch<T: for<'a> Deserialize<'a>>(
     .await;
 
     match resp {
-        Ok(r) => match r.json::<T>().await {
+        // HTTP status code 2xx (成功)
+        Ok(r) if r.status().to_string().starts_with('2') => match r.json::<T>().await {
             Ok(r) => Ok(r),
             Err(e) => Err(format!("无法解析响应：{e}")),
         },
+        // 服务器返回了错误
+        Ok(r) => Err(format!(
+            "{} ({} {})",
+            r.text().await.unwrap(),
+            r.status(),
+            r.status_text()
+        )),
         Err(e) => Err(format!("无法发送请求：{e}")),
     }
 }

@@ -6,6 +6,7 @@ pub struct Props {
     pub children: Children,
 }
 
+/// 卡片
 #[function_component(Card)]
 pub fn card(props: &Props) -> Html {
     html! {

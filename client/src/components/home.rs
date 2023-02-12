@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use crate::components::{article::articles::ArticlePreview, card::Card};
+use crate::components::{article::article_preview::ArticlePreview, card::Card};
 
 #[function_component(Home)]
 pub fn home() -> Html {
