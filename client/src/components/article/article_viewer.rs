@@ -3,7 +3,11 @@ use pulldown_cmark::{html, Options, Parser};
 use web_sys::Node;
 use yew::prelude::*;
 
-use crate::{components::card::Card, fetch, models::article::Article};
+use crate::{
+    components::{card::Card, container::AppContext},
+    fetch,
+    models::article::Article,
+};
 
 #[derive(Debug, PartialEq, Eq, Properties)]
 pub struct Props {
@@ -30,6 +34,7 @@ pub fn article_viewer(props: &Props) -> Html {
                             format!("/api/article/{article_id}"),
                             Method::GET,
                             None,
+                            None,
                         )
                         .await,
                     );
@@ -47,8 +52,9 @@ pub fn article_viewer(props: &Props) -> Html {
     };
 
     // 设置网页标题
-    use_context::<Callback<String>>()
+    use_context::<AppContext>()
         .unwrap()
+        .set_title
         .emit(title.clone());
 
     html! {

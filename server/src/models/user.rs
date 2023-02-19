@@ -33,6 +33,19 @@ pub struct GithubUserInfo {
     pub avatar_url: String,
 }
 
+/// 返回给客户端的用户信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserInfo {
+    /// Github 用户 ID
+    pub id: i32,
+    /// 用户名(不是昵称)
+    pub login: String,
+    /// 用户头像的地址
+    pub avatar_url: String,
+    /// 是否为管理员
+    pub is_admin: bool,
+}
+
 /// 网站的所有用户（包括管理员）（用于身份验证）
 #[derive(Debug, Clone)]
 pub struct User {

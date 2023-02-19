@@ -1,5 +1,9 @@
 use crate::components::{
-    article::article_viewer::ArticleViewer, container::Container, home::Home, not_found::NotFound,
+    article::article_viewer::ArticleViewer,
+    container::Container,
+    home::Home,
+    not_found::NotFound,
+    user::{login::Login, oauth::OAuth},
 };
 
 use yew::prelude::*;
@@ -21,6 +25,10 @@ pub enum Route {
     Home,
     #[at("/article/:article_id")]
     ArticleViewer { article_id: u32 },
+    #[at("/user/login")]
+    Login,
+    #[at("/user/login/oauth")]
+    OAuth,
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -32,7 +40,9 @@ fn switch(route: Route) -> Html {
         {
             match route {
                 Route::Home => html! { <Home/> },
-                Route::ArticleViewer{article_id} => html! { <ArticleViewer {article_id}/> },
+                Route::ArticleViewer { article_id } => html! { <ArticleViewer {article_id}/> },
+                Route::Login => html! { <Login/> },
+                Route::OAuth => html! { <OAuth/> },
                 Route::NotFound => html! { <NotFound/> },
             }
         }

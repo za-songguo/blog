@@ -20,7 +20,8 @@ pub fn article_preview() -> Html {
             move |_| {
                 wasm_bindgen_futures::spawn_local(async move {
                     articles.set(
-                        fetch::<Vec<Preview>>("/api/articles".into(), Method::GET, None).await,
+                        fetch::<Vec<Preview>>("/api/articles".into(), Method::GET, None, None)
+                            .await,
                     );
                     loading.set(false);
                 });
