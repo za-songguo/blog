@@ -26,7 +26,7 @@ pub async fn get_comments_for_article(
     .map(|i| Comment {
         id: Some(i.id as u32),
         user: Some(UserInfo {
-            id: i.user_id,
+            id: i.user_id as u32,
             login: i.name.clone(),
             avatar_url: i.avatar_url.clone(),is_admin: i.user_id == 90502461,
         }),

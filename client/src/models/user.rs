@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct User {
     /// Github 用户 ID
-    pub id: i32,
+    pub id: u32,
     /// 用户名(不是昵称)
     pub login: String,
     /// 用户头像的地址

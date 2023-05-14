@@ -33,7 +33,7 @@ pub async fn new_comment(
 
     sqlx::query!(
         "INSERT INTO comments (user_id, content, article) VALUES ($1, $2, $3)",
-        user_id,
+        user_id as i32,
         comment.content,
         article_id as i32
     )

@@ -85,7 +85,7 @@ pub async fn github_login(
     // 如果已经有一条相同 ID 的记录就更新，否则就新增
     sqlx::query!(
         "INSERT INTO users (id, name, avatar_url) VALUES ($1, $2, $3) ON CONFLICT (id) DO UPDATE SET name = $2, avatar_url = $3",
-        user_info.id,
+        user_info.id as i32,
         user_info.login,
         user_info.avatar_url
     )

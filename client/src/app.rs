@@ -1,5 +1,6 @@
 use crate::components::{
     article::{delete::DeleteArticle, edit::EditArticle, new::NewArticle, view::ArticleViewer},
+    comment::delete::DeleteComment,
     container::Container,
     home::Home,
     not_found::NotFound,
@@ -31,6 +32,8 @@ pub enum Route {
     EditArticle { article_id: u32 },
     #[at("/article/delete/:article_id")]
     DeleteArticle { article_id: u32 },
+    #[at("/comment/delete/:comment_id")]
+    DeleteComment { comment_id: u32 },
     #[at("/user/login")]
     Login,
     #[at("/user/login/oauth")]
@@ -50,6 +53,7 @@ fn switch(route: Route) -> Html {
                 Route::NewArticle => html! { <NewArticle/> },
                 Route::EditArticle { article_id } => html! { <EditArticle {article_id}/> },
                 Route::DeleteArticle { article_id } => html! { <DeleteArticle {article_id}/> },
+                Route::DeleteComment { comment_id } => html! { <DeleteComment {comment_id}/> },
                 Route::Login => html! { <Login/> },
                 Route::OAuth => html! { <OAuth/> },
                 Route::NotFound => html! { <NotFound/> },

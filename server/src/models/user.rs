@@ -26,7 +26,7 @@ pub struct AccessToken {
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct GithubUserInfo {
     /// Github 用户 ID
-    pub id: i32,
+    pub id: u32,
     /// 用户名(不是昵称)
     pub login: String,
     /// 用户头像的地址
@@ -37,7 +37,7 @@ pub struct GithubUserInfo {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserInfo {
     /// Github 用户 ID
-    pub id: i32,
+    pub id: u32,
     /// 用户名(不是昵称)
     pub login: String,
     /// 用户头像的地址
@@ -49,13 +49,13 @@ pub struct UserInfo {
 /// 网站的所有用户（包括管理员）（用于身份验证）
 #[derive(Debug, Clone)]
 pub struct User {
-    pub id: i32,
+    pub id: u32,
 }
 
 /// 网站的管理员（用于身份验证）
 #[derive(Debug, Clone)]
 pub struct Admin {
-    pub id: i32,
+    pub id: u32,
 }
 
 // 实现 FromRequest trait
@@ -91,7 +91,7 @@ impl<E: ErrorRenderer> FromRequest<E> for User {
                 }
             };
 
-            if sqlx::query!("SELECT id FROM users WHERE id = $1", user_id)
+            if sqlx::query!("SELECT id FROM users WHERE id = $1", user_id as i32)
                 .fetch_optional(&db_pool)
                 .await?
                 .is_none()
@@ -136,7 +136,7 @@ impl<E: ErrorRenderer> FromRequest<E> for Admin {
                 }
             };
 
-            if sqlx::query!("SELECT id FROM users WHERE id = $1", user_id)
+            if sqlx::query!("SELECT id FROM users WHERE id = $1", user_id as i32)
                 .fetch_optional(&db_pool)
                 .await?
                 .is_some()
@@ -165,7 +165,7 @@ impl<E: ErrorRenderer> FromRequest<E> for Admin {
     }
 }
 
-async fn get_user_id(access_token: &Cookie<'_>) -> Result<i32, CustomError> {
+async fn get_user_id(access_token: &Cookie<'_>) -> Result<u32, CustomError> {
     let client = Client::new();
 
     let user_info = client

@@ -30,7 +30,7 @@ pub async fn delete_comment(
         sqlx::query!(
             "DELETE FROM comments WHERE id = $1 AND user_id = $2",
             comment_id as i32,
-            user_id
+            user_id as i32
         )
         .execute(db_pool)
         .await?
