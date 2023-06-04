@@ -10,15 +10,11 @@ use reqwest::Client;
 use std::sync::Arc;
 
 use crate::{
+    constants,
     errors::CustomError,
     models::user::{AccessToken, GithubUserInfo, Login},
     AppState,
 };
-
-// 替换成你自己的
-const CLIENT_ID: &str = "1c509a9cd47635f8a78d";
-// 替换成你自己的
-const CLIENT_SECRET: &str = "edacafdd5d4a62301bb9f2eea674a3c443b847e8";
 
 /// 接收传过来的 code，获取 access_token，得到用户数据并存进数据库
 pub async fn github_login(
@@ -34,7 +30,9 @@ pub async fn github_login(
     // 把 Accept 设置为 json，让 Github 的 API 给我们返回 JSON 格式的数据
     let access_token = client
         .post(format!(
-            "https://github.com/login/oauth/access_token?client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&code={code}"
+            "https://github.com/login/oauth/access_token?client_id={}&client_secret={}&code={code}",
+            constants::CLIENT_ID,
+            constants::CLIENT_SECRET
         ))
         .header("Accept", "application/json")
         .send()

@@ -1,6 +1,9 @@
 use yew::prelude::*;
 
-use crate::components::{card::Card, container::AppContext};
+use crate::{
+    components::{card::Card, container::AppContext},
+    constants,
+};
 
 #[function_component(Login)]
 pub fn login() -> Html {
@@ -12,7 +15,7 @@ pub fn login() -> Html {
 
     html! {
         <Card title={"登录"}>
-            <a class="button mainButton" href="https://github.com/login/oauth/authorize?client_id=1c509a9cd47635f8a78d">{ "使用 Github 登录" }</a>
+            <a class="button mainButton" href={format!("https://github.com/login/oauth/authorize?client_id={}", constants::CLIENT_ID)}>{ "使用 Github 登录" }</a>
         </Card>
     }
 }

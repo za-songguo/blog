@@ -1,5 +1,6 @@
 mod article;
 mod comment;
+mod constants;
 mod errors;
 mod models;
 mod user;
