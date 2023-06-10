@@ -3,3 +3,9 @@
 [[proxy]]
 rewrite = "/api/"
 backend = "http://localhost:12345/"
+
+[build]
+release = true
+
+[serve]
+no_autoreload = true

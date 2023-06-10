@@ -1,0 +1,36 @@
+http://0.0.0.0:8080 # 我们不使用 HTTPS，网站部署后，我们会在外面套一层 Cloudflare 之类的 CDN，会自动帮我们加上 HTTPS
+# 这里地址虽然是这个，但是存在一些问题，只能在本机访问，对于内网穿透没有影响，如果你是在服务器上部署的，这里需要填写自己的域名，具体可参照 Caddy v2 文档
+# 注意如果地址有变动，需要到 Github 的 OAuth 设置里改地址，否则无法登录
+
+encode {
+	# 启用压缩
+	gzip
+	zstd
+
+	match {
+		header Content-Type text/*
+		header Content-Type application/json*
+		# 启用对 WASM 的压缩
+		header Content-Type application/wasm*
+		header Content-Type application/javascript*
+		header Content-Type application/xhtml+xml*
+		header Content-Type application/atom+xml*
+		header Content-Type application/rss+xml*
+		header Content-Type image/svg+xml*
+	}
+}
+
+# 代理 /api 路径的请求
+handle /api/* {
+	# 在发送前去掉请求前缀的 `/api`，因为服务端的api里没有这个路径
+	uri strip_prefix /api
+	reverse_proxy localhost:12345
+}
+
+handle {
+	root dist
+
+	# 把所有请求都转发到 index.html ，让 WASM 来处理 route
+	try_files {path} /index.html
+	file_server
+}
