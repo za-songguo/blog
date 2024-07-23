@@ -32,23 +32,20 @@ pub fn edit_article(props: &Props) -> Html {
         let loading = loading.clone();
         let old_article = old_article.clone();
 
-        use_effect_with_deps(
-            move |_| {
-                wasm_bindgen_futures::spawn_local(async move {
-                    old_article.set(
-                        fetch::fetch::<Article>(
-                            format!("/api/article/{article_id}"),
-                            Method::GET,
-                            None,
-                            None,
-                        )
-                        .await,
-                    );
-                    loading.set(false);
-                });
-            },
-            (),
-        );
+        use_effect_with((), move |_| {
+            wasm_bindgen_futures::spawn_local(async move {
+                old_article.set(
+                    fetch::fetch::<Article>(
+                        format!("/api/article/{article_id}"),
+                        Method::GET,
+                        None,
+                        None,
+                    )
+                    .await,
+                );
+                loading.set(false);
+            });
+        });
     }
 
     let submit_response = use_state(|| Err("".into()));
@@ -98,14 +95,14 @@ pub fn edit_article(props: &Props) -> Html {
             } else if let Ok(article) = &*old_article {
                 <MarkdownEditor {submit} title={article.title.clone()} content={article.content.clone()}/>
                 if let Ok(message) = &*submit_response {
-                    <Modal title={"服务器返回消息"} {footer}>{ message }</Modal>
+                    <Modal title={"服务器返回消息"} {footer}>{ message.clone() }</Modal>
                 } else if let Err(e) = &*submit_response {
                     if !e.is_empty() {
-                        <Modal title={"错误"}>{ e }</Modal>
+                        <Modal title={"错误"}>{ e.clone() }</Modal>
                     }
                 }
             } else if let Err(e) = &*old_article {
-                <Modal title={"错误"}>{ e }</Modal>
+                <Modal title={"错误"}>{ e.clone() }</Modal>
             }
         </>
     }

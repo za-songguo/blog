@@ -3,6 +3,7 @@ use std::sync::Arc;
 use ntex::web::types::{Json, Path, State};
 
 use crate::{
+    constants::GITHUB_USER_ID,
     errors::CustomError,
     models::{comment::Comment, user::UserInfo},
     AppState,
@@ -28,7 +29,7 @@ pub async fn get_comments_for_article(
         user: Some(UserInfo {
             id: i.user_id as u32,
             login: i.name.clone(),
-            avatar_url: i.avatar_url.clone(),is_admin: i.user_id == 90502461,
+            avatar_url: i.avatar_url.clone(),is_admin: i.user_id as u32 == GITHUB_USER_ID,
         }),
         content: i.content.clone(),
         date: Some(i.date),

@@ -3,6 +3,7 @@ use std::sync::Arc;
 use ntex::web::types::{Json, State};
 
 use crate::{
+    constants::GITHUB_USER_ID,
     errors::CustomError,
     models::user::{User, UserInfo},
     AppState,
@@ -26,6 +27,6 @@ pub async fn get_user_info(
         id: user_info.id as u32,
         login: user_info.name,
         avatar_url: user_info.avatar_url,
-        is_admin: user_info.id == 90502461,
+        is_admin: user_info.id as u32 == GITHUB_USER_ID,
     }))
 }

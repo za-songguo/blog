@@ -1,4 +1,4 @@
-use std::{future::Future, pin::Pin, sync::Arc};
+use std::{future::Future, sync::Arc};
 
 use cookie::Cookie;
 use ntex::{
@@ -8,7 +8,7 @@ use ntex::{
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-use crate::{errors::CustomError, AppState};
+use crate::{constants::GITHUB_USER_ID, errors::CustomError, AppState};
 
 /// 前端 Github 授权登录后传上来的 code
 #[derive(Debug, Clone, Deserialize)]
@@ -67,9 +67,11 @@ pub struct Admin {
 
 impl<E: ErrorRenderer> FromRequest<E> for User {
     type Error = CustomError;
-    type Future = Pin<Box<dyn Future<Output = Result<Self, Self::Error>>>>;
 
-    fn from_request(req: &ntex::web::HttpRequest, _: &mut ntex::http::Payload) -> Self::Future {
+    fn from_request(
+        req: &ntex::web::HttpRequest,
+        _: &mut ntex::http::Payload,
+    ) -> impl Future<Output = Result<Self, Self::Error>> {
         // 注意：下面两个变量的类型不能出现引用（req），否则就会出现生命周期问题（future）
         let db_pool = Arc::clone(req.app_state::<Arc<AppState>>().unwrap())
             .db_pool
@@ -112,9 +114,11 @@ impl<E: ErrorRenderer> FromRequest<E> for User {
 
 impl<E: ErrorRenderer> FromRequest<E> for Admin {
     type Error = CustomError;
-    type Future = Pin<Box<dyn Future<Output = Result<Self, Self::Error>>>>;
 
-    fn from_request(req: &ntex::web::HttpRequest, _: &mut ntex::http::Payload) -> Self::Future {
+    fn from_request(
+        req: &ntex::web::HttpRequest,
+        _: &mut ntex::http::Payload,
+    ) -> impl Future<Output = Result<Self, Self::Error>> {
         // 注意：下面两个变量的类型不能出现引用（req），否则就会出现生命周期问题（future）
         let db_pool = Arc::clone(req.app_state::<Arc<AppState>>().unwrap())
             .db_pool
@@ -144,7 +148,7 @@ impl<E: ErrorRenderer> FromRequest<E> for Admin {
                 // 查到了
                 // 需要管理员权限
                 // 管理员的 Github ID
-                if user_id != 90502461 {
+                if user_id != GITHUB_USER_ID {
                     // 用户不是管理员
                     return Err(CustomError::AuthFailed(
                         "你不是管理员，无权执行该操作".into(),

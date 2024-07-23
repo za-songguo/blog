@@ -93,7 +93,7 @@ pub async fn github_login(
     let mut response = Response::Ok().body(format!("Hi, {}!", user_info.login));
 
     // 忽略错误
-    let _ = response.add_cookie(&cookie);
+    let _ = response.add_cookie(cookie);
 
     Ok(response)
 }

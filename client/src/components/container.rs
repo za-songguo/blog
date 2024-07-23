@@ -42,17 +42,14 @@ pub fn container(props: &Props) -> Html {
     {
         let user = user.clone();
         // 在组件挂载成功时获取用户数据
-        use_effect_with_deps(
-            move |_| {
-                wasm_bindgen_futures::spawn_local(async move {
-                    user.set(
-                        fetch::fetch::<User>("/api/user/info".into(), Method::GET, None, None)
-                            .await,
-                    )
-                })
-            },
-            (),
-        );
+        use_effect_with((),move |_| {
+            wasm_bindgen_futures::spawn_local(async move {
+                user.set(
+                    fetch::fetch::<User>("/api/user/info".into(), Method::GET, None, None)
+                        .await,
+                )
+            })
+        });
     }
 
     // 应用程序的 Context

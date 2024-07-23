@@ -1,4 +1,4 @@
-use gloo::net::http::{Method, Request};
+use gloo::net::http::{Method, RequestBuilder};
 use serde::Deserialize;
 
 /// 发送请求
@@ -8,7 +8,7 @@ pub async fn fetch<T: for<'a> Deserialize<'a>>(
     body: Option<String>,
     content_type: Option<String>,
 ) -> Result<T, String> {
-    let req = Request::new(&url).method(method);
+    let req = RequestBuilder::new(&url).method(method);
 
     let req = match content_type {
         Some(content_type) => req.header("Content-Type", &content_type),
@@ -16,8 +16,8 @@ pub async fn fetch<T: for<'a> Deserialize<'a>>(
     };
 
     let resp = match body {
-        Some(body) => req.body(body),
-        None => req,
+        Some(body) => req.body(body).unwrap(),
+        None => req.build().unwrap(),
     }
     .send()
     .await;
@@ -47,7 +47,7 @@ pub async fn fetch_without_deserialize(
     body: Option<String>,
     content_type: Option<String>,
 ) -> Result<String, String> {
-    let req = Request::new(&url).method(method);
+    let req = RequestBuilder::new(&url).method(method);
 
     let req = match content_type {
         Some(content_type) => req.header("Content-Type", &content_type),
@@ -55,8 +55,8 @@ pub async fn fetch_without_deserialize(
     };
 
     let resp = match body {
-        Some(body) => req.body(body),
-        None => req,
+        Some(body) => req.body(body).unwrap(),
+        None => req.build().unwrap(),
     }
     .send()
     .await;

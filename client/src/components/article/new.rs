@@ -52,10 +52,10 @@ pub fn new_article() -> Html {
             <h1 style="margin-top: 5%; margin-left: 2%;">{ "新增文章" }</h1>
             <MarkdownEditor {submit}/>
             if let Ok(message) = &*submit_response {
-                <Modal title={"服务器返回消息"} {footer}>{ message }</Modal>
+                <Modal title={"服务器返回消息"} {footer}>{ message.clone() }</Modal>
             } else if let Err(e) = &*submit_response {
                 if !e.is_empty() {
-                    <Modal title={"错误"}>{ e }</Modal>
+                    <Modal title={"错误"}>{ e.clone() }</Modal>
                 }
             }
         </>

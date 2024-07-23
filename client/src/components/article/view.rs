@@ -19,29 +19,26 @@ pub fn article_viewer(props: &Props) -> Html {
     let loading = use_state(|| true);
     let article = use_state(|| Err("".into()));
 
-    // 这个变量的声明得放在 use_effect_with_deps 外面，否则就会遇到生命周期问题（闭包和future: 'static）
+    // 这个变量的声明得放在 use_effect_with 外面，否则就会遇到生命周期问题（闭包和future: 'static）
     let article_id = props.article_id;
 
     {
         let loading = loading.clone();
         let article = article.clone();
-        use_effect_with_deps(
-            move |_| {
-                wasm_bindgen_futures::spawn_local(async move {
-                    article.set(
-                        fetch::fetch::<Article>(
-                            format!("/api/article/{article_id}"),
-                            Method::GET,
-                            None,
-                            None,
-                        )
-                        .await,
-                    );
-                    loading.set(false);
-                });
-            },
-            (),
-        );
+        use_effect_with((), move |_| {
+            wasm_bindgen_futures::spawn_local(async move {
+                article.set(
+                    fetch::fetch::<Article>(
+                        format!("/api/article/{article_id}"),
+                        Method::GET,
+                        None,
+                        None,
+                    )
+                    .await,
+                );
+                loading.set(false);
+            });
+        });
     }
 
     let title = if let Ok(article) = (*article).clone() {

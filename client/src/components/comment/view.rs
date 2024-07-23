@@ -49,7 +49,7 @@ pub fn comments(props: &Props) -> Html {
     {
         let update_comments_list = update_comments_list.clone();
 
-        use_effect_with_deps(move |_| update_comments_list.emit(()), ());
+        use_effect_with((), move |_| update_comments_list.emit(()));
     }
 
     let navigator = use_navigator().unwrap();

@@ -89,10 +89,10 @@ pub fn new_comment(props: &Props) -> Html {
                 }
 
                 if let Ok(message) = &*submit_response {
-                    <Modal title={"服务器返回消息"}>{ message }</Modal>
+                    <Modal title={"服务器返回消息"}>{ message.clone() }</Modal>
                 } else if let Err(e) = &*submit_response {
                     if !e.is_empty() {
-                        <Modal title={"错误"}>{ e }</Modal>
+                        <Modal title={"错误"}>{ e.clone() }</Modal>
                     }
                 }
             } else {

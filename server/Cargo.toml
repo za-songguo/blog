@@ -6,15 +6,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = { version = "0.4.23", features = ["serde"] }
-cookie = "0.16.0"
-dotenvy = "0.15.6"
-env_logger = "0.10.0"
-ntex = { version = "0.6.0", features = ["cookie", "tokio", "rustls"] }
-reqwest = { version = "0.11.14", features = ["json"] }
-serde = { version = "1.0.152", features = ["derive"] }
-serde_json = "1.0.91"
-sqlx = { version = "0.6.2", features = [
+chrono = { version = "0.4.38", features = ["serde"] }
+cookie = "0.18.1"
+dotenvy = "0.15.7"
+env_logger = "0.11.3"
+ntex = { version = "2.0.3", features = ["cookie", "tokio", "rustls"] }
+reqwest = { version = "0.12.5", features = ["json"] }
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.120"
+sqlx = { version = "0.8.0", features = [
     "runtime-tokio-rustls",
     "postgres",
     "macros",

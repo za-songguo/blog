@@ -69,10 +69,10 @@ pub fn delete_comment(props: &Props) -> Html {
             <Modal title={"删除评论"} footer={footer_delete}>{ format!("确定要删除 ID 为 {} 的评论吗？", &props.comment_id) }</Modal>
 
             if let Ok(message) = &*server_response {
-                <Modal title={"服务器返回消息"} footer={footer_home}>{ message }</Modal>
+                <Modal title={"服务器返回消息"} footer={footer_home}>{ message.clone() }</Modal>
             } else if let Err(e) = &*server_response {
                 if !e.is_empty() {
-                    <Modal title={"错误"}>{ e }</Modal>
+                    <Modal title={"错误"}>{ e.clone() }</Modal>
                 }
             }
         </>

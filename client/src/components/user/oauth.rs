@@ -41,37 +41,33 @@ pub fn oauth() -> Html {
         let message = message.clone();
         let loading = loading.clone();
 
-        use_effect_with_deps(
-            move |_| {
-                wasm_bindgen_futures::spawn_local(async move {
-                    message.set(
-                        // 服务端会返回消息，所以用这个函数
-                        fetch::fetch_without_deserialize(
-                            "/api/user/login".into(),
-                            Method::POST,
-                            Some(serde_json::to_string(&login.unwrap()).unwrap()),
-                            // 注意 Content-Type
-                            Some("application/json".into()),
-                        )
-                        .await,
-                    );
+        use_effect_with((), move |_| {
+            wasm_bindgen_futures::spawn_local(async move {
+                message.set(
+                    // 服务端会返回消息，所以用这个函数
+                    fetch::fetch_without_deserialize(
+                        "/api/user/login".into(),
+                        Method::POST,
+                        Some(serde_json::to_string(&login.unwrap()).unwrap()),
+                        // 注意 Content-Type
+                        Some("application/json".into()),
+                    )
+                    .await,
+                );
 
-                    user_info.set(
-                        fetch::fetch::<User>("/api/user/info".into(), Method::GET, None, None)
-                            .await,
-                    );
+                user_info.set(
+                    fetch::fetch::<User>("/api/user/info".into(), Method::GET, None, None).await,
+                );
 
-                    // 确保这个更新的操作只执行一次（挂载时）
-                    if user_info.is_ok() {
-                        // 设置 Context 里的 User
-                        context.user.set((*user_info).clone());
-                    }
+                // 确保这个更新的操作只执行一次（挂载时）
+                if user_info.is_ok() {
+                    // 设置 Context 里的 User
+                    context.user.set((*user_info).clone());
+                }
 
-                    loading.set(false);
-                });
-            },
-            (),
-        );
+                loading.set(false);
+            });
+        });
     }
 
     let navigator = use_navigator().unwrap();
@@ -89,10 +85,10 @@ pub fn oauth() -> Html {
         } else {
             if let Ok(m) = &*message {
                 // 服务端返回的问候语
-                <Modal title={"登录成功"} {footer}>{ m }</Modal>
+                <Modal title={"登录成功"} {footer}>{ m.clone() }</Modal>
             } else if let Err(e) = &*message {
                 // 错误弹窗
-                <Modal title={"错误"}>{ e }</Modal>
+                <Modal title={"错误"}>{ e.clone() }</Modal>
             }
         }
     }

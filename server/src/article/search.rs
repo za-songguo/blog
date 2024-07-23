@@ -10,8 +10,9 @@ pub async fn search_article(
 ) -> Result<Json<Vec<ArticlePreview>>, CustomError> {
     let db_pool = &state.db_pool;
 
+    // 不区分大小写
     let result = sqlx::query!(
-        "SELECT id, title, date FROM articles WHERE title LIKE $1 OR content LIKE $1",
+        "SELECT id, title, date FROM articles WHERE title ILIKE $1 OR content ILIKE $1",
         format!("%{}%", keyword.0)
     )
     .fetch_all(db_pool)
